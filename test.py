@@ -44,11 +44,15 @@ def backward_hidden_hidden():
 
 #Backward para todas las capas de la red neuronal
 def backward_process(Y_output, Y_desired):
-    delta = (Y_output-Y_desired)
+    #Find delta to use in all derivates
+    #Defined as (S^o - S^d)*(S^o)*(1-S^o)
+    delta = np.multiply((Y_output - Y_desired), Y_output)
+    delta = np.multiply(delta, np.ones(np.shape(Y_output)) - Y_output)
+
     backward_hidden_ouput()
     backward_hidden_hidden()
 
 create_nn([3, 4, 3, 2])
 activation_functions = fill_activation_functions(logistic_function, logistic_function, logistic_function)
-print(vector_weights)
-print(activation_functions)
+# print(vector_weights)
+# print(activation_functions)
