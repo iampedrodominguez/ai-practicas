@@ -2,7 +2,7 @@ import numpy as np
 
 vector_weights = []
 activation_functions = []
-n_layers = 0
+n_layers = 4
 
 #Crea la matriz de pesos de la red neuronal
 def create_nn(layer_sizes):
@@ -14,15 +14,15 @@ def create_nn(layer_sizes):
 #Recibe X: Input inicial, W: Matriz con los pesos de cada capa y la lista de funciones de activación. 
 #Retorna Y: resultado de la red neuronal
 def forward_process(X, W, activation_functions):
-    Y = X
+    Y_output = X
     #aumentando el bias
-    Y= np.append(Y,[1])
+    Y_output = np.append(Y_output,[1])
     for layer in range(n_layers - 1):
-        net = np.dot(Y, W[layer])
-        Y = activation_functions[layer](net)
+        net = np.dot(Y_output, W[layer])
+        Y_output = activation_functions[layer](net)
         # aumentando el bias
-        Y= np.append(Y,[1])
-    return Y
+        Y_output = np.append(Y,[1])
+    return Y_output
 
 #Función de activación logística
 #Definida como \frac{1}{1 + e^(-net)}
@@ -30,8 +30,9 @@ def logistic_function(net):
     return 1/(1+np.exp(-1*net))
 
 #Guarda las funciones de activación para cada capa de la red neuronal
-def fill_activation_functions(*_activation_functions):
-    activation_functions = list(_activation_functions)
+def fill_activation_functions(*_functions):
+    activation_functions = list(_functions)
+    return activation_functions
 
 #Backward para las capas output-hidden de la red neuronal
 def backward_hidden_ouput():
@@ -42,12 +43,12 @@ def backward_hidden_hidden():
     pass
 
 #Backward para todas las capas de la red neuronal
-def backward_process():
-
+def backward_process(Y_output, Y_desired):
+    delta = (Y_output-Y_desired)
     backward_hidden_ouput()
     backward_hidden_hidden()
 
 create_nn([3, 4, 3, 2])
-fill_activation_functions(logistic_function, logistic_function, logistic_function)
+activation_functions = fill_activation_functions(logistic_function, logistic_function, logistic_function)
 print(vector_weights)
 print(activation_functions)
